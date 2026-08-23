@@ -234,3 +234,26 @@
   border-color: var(--title-color);
   box-shadow: 0 0 8px var(--green-color);
 }
+
+@media screen and (max-width: 768px) {
+  .palette__dropdown {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    right: -40px; /* Shift to align beautifully next to bottom nav buttons */
+  }
+  
+  .palette__dropdown::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 44px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--card-color);
+    border-right: 1px solid rgba(1, 195, 105, 0.2);
+    border-bottom: 1px solid rgba(1, 195, 105, 0.2);
+    transform: rotate(45deg);
+  }
+}

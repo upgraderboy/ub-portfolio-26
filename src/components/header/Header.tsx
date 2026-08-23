@@ -38,9 +38,19 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
       const savedColor = localStorage.getItem("portfolio_accent_color") || "#00ff1e";
       setAccentColor(savedColor);
       
-      // Apply variables directly to root to ensure correct initialization
-      document.documentElement.style.setProperty('--green-color', savedColor);
-      document.documentElement.style.setProperty('--btn-color', savedColor);
+      const styleId = "custom-accent-color-style";
+      let styleEl = document.getElementById(styleId);
+      if (!styleEl) {
+        styleEl = document.createElement("style");
+        styleEl.id = styleId;
+        document.head.appendChild(styleEl);
+      }
+      styleEl.innerHTML = `
+        :root, [data-theme="dark"] {
+          --green-color: ${savedColor} !important;
+          --btn-color: ${savedColor} !important;
+        }
+      `;
     }
   }, []);
 
@@ -139,8 +149,21 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
   const handleAccentColorChange = (color: string) => {
     setAccentColor(color);
     localStorage.setItem("portfolio_accent_color", color);
-    document.documentElement.style.setProperty('--green-color', color);
-    document.documentElement.style.setProperty('--btn-color', color);
+    
+    const styleId = "custom-accent-color-style";
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) {
+      styleEl = document.createElement("style");
+      styleEl.id = styleId;
+      document.head.appendChild(styleEl);
+    }
+    styleEl.innerHTML = `
+      :root, [data-theme="dark"] {
+        --green-color: ${color} !important;
+        --btn-color: ${color} !important;
+      }
+    `;
+    
     setShowPalette(false);
   };
 
