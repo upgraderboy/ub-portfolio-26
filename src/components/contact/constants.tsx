@@ -1,18 +1,10 @@
-const getEnvVar = (name: string): string | undefined => {
-  if (typeof process !== "undefined" && process.env) {
-    if (process.env[name]) return process.env[name];
-    if (process.env[`NEXT_PUBLIC_${name}`]) return process.env[`NEXT_PUBLIC_${name}`];
-  }
-  try {
-    // @ts-ignore
-    if (typeof import.meta !== "undefined" && import.meta.env) {
-      // @ts-ignore
-      return import.meta.env[name];
-    }
-  } catch (e) {}
-  return undefined;
-};
+// @ts-ignore
+const vService = typeof import.meta !== "undefined" && import.meta.env ? import.meta.env.VITE_SERVICE_ID : undefined;
+// @ts-ignore
+const vTemplate = typeof import.meta !== "undefined" && import.meta.env ? import.meta.env.VITE_TEMPLATE_ID : undefined;
+// @ts-ignore
+const vPublic = typeof import.meta !== "undefined" && import.meta.env ? import.meta.env.VITE_PUBLIC_KEY : undefined;
 
-export const SERVICE_ID = getEnvVar("VITE_SERVICE_ID") || "";
-export const TEMPLATE_ID = getEnvVar("VITE_TEMPLATE_ID") || "";
-export const PUBLIC_KEY = getEnvVar("VITE_PUBLIC_KEY") || "";
+export const SERVICE_ID = process.env.NEXT_PUBLIC_VITE_SERVICE_ID || process.env.VITE_SERVICE_ID || vService || "";
+export const TEMPLATE_ID = process.env.NEXT_PUBLIC_VITE_TEMPLATE_ID || process.env.VITE_TEMPLATE_ID || vTemplate || "";
+export const PUBLIC_KEY = process.env.NEXT_PUBLIC_VITE_PUBLIC_KEY || process.env.VITE_PUBLIC_KEY || vPublic || "";
