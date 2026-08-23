@@ -274,7 +274,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
             rel="noopener noreferrer"
           >
             <img
-              src={!dark == true ? UB : AB}
+              src={!dark ? "/assets/upgraderboy_dark.svg" : "/assets/logo1.svg"}
               style={{ height: "200px" }}
               alt="Upgrader Boy"
             />
