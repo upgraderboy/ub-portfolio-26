@@ -154,3 +154,83 @@
 .nav__user-menu-item:hover {
   background-color: rgba(100, 116, 139, 0.08) !important;
 }
+
+/* Color Palette Switcher */
+.palette__container {
+  position: relative;
+}
+
+.palette__icon {
+  font-size: 1.25rem;
+  color: var(--title-color);
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.2s;
+}
+
+.palette__icon:hover {
+  transform: rotate(30deg);
+  color: var(--green-color);
+}
+
+.palette__dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 1rem;
+  background-color: var(--card-color);
+  border: 1px solid rgba(1, 195, 105, 0.2);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  min-width: 200px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  z-index: 1010;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  text-align: center;
+}
+
+.palette__dropdown.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.palette__title {
+  font-size: 0.8rem;
+  font-weight: var(--font-semi-bold);
+  color: var(--title-color);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.palette__list {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.palette__color {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  padding: 0;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.palette__color:hover {
+  transform: scale(1.2);
+}
+
+.palette__color.active {
+  border-color: var(--title-color);
+  box-shadow: 0 0 8px var(--green-color);
+}

@@ -15,15 +15,39 @@ interface HeaderProps {
   navigate: (to: string) => void;
 }
 
+const ACCENT_COLORS = [
+  { name: "Neon Green", value: "#00ff1e" },
+  { name: "Cyan Blue", value: "#00d2ff" },
+  { name: "Electric Purple", value: "#bd5fff" },
+  { name: "Amber Orange", value: "#ff8f00" },
+  { name: "Hot Rose", value: "#ff2a5f" },
+  { name: "Solar Gold", value: "#ffd600" }
+];
+
 const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
   const [dark, setMode] = useState(false);
   const [Toggle, showMenu] = useState(false);
   const [activeNav, setActiveNav] = useState("#home");
+  const [showPalette, setShowPalette] = useState(false);
+  const [accentColor, setAccentColor] = useState("#00ff1e");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setMode(localStorage.getItem("mode") === "light");
+      
+      const savedColor = localStorage.getItem("portfolio_accent_color") || "#00ff1e";
+      setAccentColor(savedColor);
+      
+      // Apply variables directly to root to ensure correct initialization
+      document.documentElement.style.setProperty('--green-color', savedColor);
+      document.documentElement.style.setProperty('--btn-color', savedColor);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleClose = () => setShowPalette(false);
+    window.addEventListener("click", handleClose);
+    return () => window.removeEventListener("click", handleClose);
   }, []);
 
   const { 
@@ -110,6 +134,14 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
     } finally {
       setAuthLoadingState(false);
     }
+  };
+
+  const handleAccentColorChange = (color: string) => {
+    setAccentColor(color);
+    localStorage.setItem("portfolio_accent_color", color);
+    document.documentElement.style.setProperty('--green-color', color);
+    document.documentElement.style.setProperty('--btn-color', color);
+    setShowPalette(false);
   };
 
   const handleGoogleSignIn = async () => {
@@ -426,6 +458,30 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
           </div>
           <div style={{ display: "flex", alignItems: "center", columnGap: "1rem" }}>
             <div className="mode" onClick={()=>setMode(!dark)}><Mode /></div>
+            
+            {/* Color Palette Switcher */}
+            <div className="palette__container" onClick={(e) => e.stopPropagation()} style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <i 
+                className="uil uil-palette palette__icon" 
+                onClick={() => setShowPalette(!showPalette)}
+                title="Customize Accent Color"
+                style={{ fontSize: "1.25rem", color: "var(--title-color)", cursor: "pointer", transition: "color 0.2s" }}
+              ></i>
+              <div className={`palette__dropdown ${showPalette ? "show" : ""}`}>
+                <div className="palette__title">Accent Color</div>
+                <div className="palette__list">
+                  {ACCENT_COLORS.map((c) => (
+                    <button
+                      key={c.value}
+                      className={`palette__color ${accentColor === c.value ? "active" : ""}`}
+                      style={{ backgroundColor: c.value }}
+                      onClick={() => handleAccentColorChange(c.value)}
+                      title={c.name}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
             
             {/* User Profile / Login Button */}
             {authLoading ? (
