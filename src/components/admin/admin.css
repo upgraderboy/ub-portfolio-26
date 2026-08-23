@@ -1,0 +1,768 @@
+/* Admin Dashboard Styles */
+
+.admin__login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--body-color);
+  padding: 1.5rem;
+}
+
+.admin__login-card {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.admin__login-logo {
+  height: 80px;
+  margin-bottom: var(--mb-1);
+}
+
+.admin__login-title {
+  font-size: var(--h2-font-size);
+  color: var(--title-color);
+  margin-bottom: var(--mb-0-5);
+}
+
+.admin__login-subtitle {
+  font-size: var(--small-font-size);
+  color: var(--font-color);
+  display: block;
+  margin-bottom: var(--mb-2);
+}
+
+.admin__login-error {
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: var(--small-font-size);
+  margin-bottom: var(--mb-1-5);
+}
+
+.admin__login-btn {
+  background-color: var(--green-color);
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  font-weight: var(--font-semi-bold);
+  cursor: pointer;
+  margin-top: var(--mb-1);
+  transition: all 0.3s ease;
+}
+
+.admin__login-btn:hover {
+  box-shadow: 0 5px 15px rgba(1, 195, 105, 0.4);
+}
+
+/* Admin Dashboard Main Layout */
+.admin__layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  background-color: var(--body-color);
+  color: var(--title-color);
+}
+
+.admin__sidebar {
+  background-color: var(--card-color);
+  border-right: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.admin__sidebar-header {
+  display: flex;
+  align-items: center;
+  column-gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin__sidebar-logo {
+  height: 40px;
+}
+
+.admin__sidebar-title {
+  font-size: var(--normal-font-size);
+  font-weight: var(--font-semi-bold);
+  color: var(--green-color);
+}
+
+.admin__nav {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.admin__nav-item {
+  display: flex;
+  align-items: center;
+  column-gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: var(--font-color);
+  font-size: var(--small-font-size);
+  font-weight: var(--font-medium);
+  transition: all 0.3s ease;
+}
+
+.admin__nav-item i {
+  font-size: 1.25rem;
+}
+
+.admin__nav-item:hover,
+.admin__nav-item.active {
+  background-color: rgba(1, 195, 105, 0.1);
+  color: var(--green-color);
+}
+
+.admin__logout-btn {
+  margin-top: auto;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  background: transparent;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 0.5rem;
+  cursor: pointer;
+  font-weight: var(--font-medium);
+  transition: all 0.3s ease;
+}
+
+.admin__logout-btn:hover {
+  background-color: rgba(255, 77, 77, 0.1);
+}
+
+.admin__sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  margin-top: auto;
+  width: 100%;
+}
+
+.admin__sidebar-footer .admin__btn,
+.admin__sidebar-footer .admin__logout-btn {
+  width: 100%;
+  margin: 0;
+}
+
+/* Admin Content Panel */
+.admin__content {
+  padding: 2.5rem;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.admin__content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin__content-title {
+  font-size: var(--h1-font-size);
+  color: var(--title-color);
+}
+
+.admin__content-subtitle {
+  font-size: var(--small-font-size);
+  color: var(--font-color);
+}
+
+.admin__section-actions {
+  display: flex;
+  column-gap: 1rem;
+}
+
+.admin__btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+  font-size: var(--small-font-size);
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+.admin__btn--primary {
+  background-color: var(--green-color);
+  color: #fff;
+}
+
+.admin__btn--primary:hover {
+  box-shadow: 0 4px 12px rgba(1, 195, 105, 0.3);
+}
+
+.admin__btn--secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--title-color);
+}
+
+.admin__btn--secondary:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.admin__btn--danger {
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+}
+
+.admin__btn--danger:hover {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+/* Forms styling inside Admin */
+.admin__form-card {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.admin__form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.admin__form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+}
+
+.admin__form-group--full {
+  grid-column: span 2;
+}
+
+.admin__form-label {
+  font-size: var(--small-font-size);
+  font-weight: var(--font-medium);
+  color: var(--title-color);
+}
+
+.admin__form-input,
+.admin__form-textarea,
+.admin__form-select {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--body-color);
+  color: var(--title-color);
+  outline: none;
+  font-size: var(--small-font-size);
+  transition: border-color 0.3s ease;
+}
+
+.admin__form-input:focus,
+.admin__form-textarea:focus,
+.admin__form-select:focus {
+  border-color: var(--green-color);
+}
+
+.admin__form-textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+/* Table styling for CRUD lists */
+.admin__table-container {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.admin__table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin__table th,
+.admin__table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--small-font-size);
+}
+
+.admin__table th {
+  background-color: rgba(255, 255, 255, 0.02);
+  color: var(--title-color);
+  font-weight: var(--font-semi-bold);
+}
+
+.admin__table td {
+  color: var(--font-color);
+  vertical-align: middle;
+}
+
+.admin__table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin__table tr.admin__table-row--dragging {
+  opacity: 0.4;
+  background-color: rgba(1, 195, 105, 0.1) !important;
+}
+
+.admin__table tr[draggable="true"] {
+  cursor: move;
+}
+
+.admin__table-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.admin__table-actions {
+  display: flex;
+  column-gap: 0.5rem;
+}
+
+.admin__action-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0.25rem;
+}
+
+.admin__action-btn--edit {
+  color: var(--green-color);
+}
+
+.admin__action-btn--edit:hover {
+  color: #fff;
+}
+
+.admin__action-btn--delete {
+  color: #ff4d4d;
+}
+
+.admin__action-btn--delete:hover {
+  color: #ff3333;
+}
+
+/* Skills management list */
+.admin__skills-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.admin__skills-card {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.admin__skills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Service points list management */
+.admin__service-points-list {
+  background-color: rgba(0,0,0,0.15);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.admin__service-point-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 40px;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.admin__service-point-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 992px) {
+  .admin__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin__sidebar {
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.25rem;
+  }
+
+  .admin__nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  @media screen and (max-width: 600px) {
+    .admin__nav {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .admin__nav-item {
+    white-space: nowrap;
+    justify-content: center;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .admin__sidebar-footer {
+    flex-direction: row;
+    column-gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .admin__sidebar-footer .admin__btn,
+  .admin__sidebar-footer .admin__logout-btn {
+    flex: 1;
+    margin: 0 !important;
+    justify-content: center;
+  }
+
+  .admin__content {
+    height: auto;
+    padding: 1.5rem;
+  }
+
+  .admin__form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin__form-group--full {
+    grid-column: span 1;
+  }
+
+  .admin__skills-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================== TIPTAP RICH TEXT EDITOR ==================== */
+.tiptap__editor {
+  background-color: var(--card-color);
+  overflow: visible !important;
+}
+
+.tiptap__tool-btn {
+  background: var(--body-color);
+  border: 1px solid var(--border-color);
+  color: var(--title-color);
+  border-radius: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  column-gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.tiptap__tool-btn:hover {
+  background-color: var(--border-color);
+  color: var(--green-color);
+  border-color: var(--green-color);
+}
+
+.tiptap__tool-btn.active {
+  background-color: rgba(1, 195, 105, 0.15);
+  color: var(--green-color);
+  border-color: var(--green-color);
+  box-shadow: 0 0 5px rgba(1, 195, 105, 0.2);
+}
+
+/* Dropdown Menu inside Tiptap Toolbar */
+.tiptap__dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--container-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  min-width: 150px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+
+.tiptap__dropdown:hover .tiptap__dropdown-content {
+  display: block;
+}
+
+.tiptap__dropdown-content button {
+  background: transparent;
+  color: var(--title-color);
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tiptap__dropdown-content button:hover {
+  background-color: rgba(0, 255, 30, 0.08);
+  color: var(--green-color);
+}
+
+/* Prosemirror rich text field defaults */
+.ProseMirror {
+  outline: none;
+  min-height: 350px;
+  color: var(--title-color);
+  font-family: var(--body-font);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.75rem;
+}
+
+.ProseMirror h1 {
+  font-size: 1.65rem;
+  color: var(--title-color);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: bold;
+}
+
+.ProseMirror h2 {
+  font-size: 1.4rem;
+  color: var(--title-color);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.ProseMirror h3 {
+  font-size: 1.15rem;
+  color: var(--title-color);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.ProseMirror ul, 
+.ProseMirror ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.25rem;
+}
+
+.ProseMirror code {
+  font-family: "Fira Code", monospace;
+  background-color: var(--body-color);
+  color: var(--green-color);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  font-size: 0.85em;
+  border: 1px solid var(--border-color);
+}
+
+.ProseMirror pre {
+  background-color: var(--body-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  font-family: "Fira Code", monospace;
+}
+
+.ProseMirror pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  font-size: 0.85rem;
+  color: var(--green-color);
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 12px 0;
+  display: block;
+}
+
+.ProseMirror video {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 12px 0;
+  display: block;
+}
+
+.ProseMirror iframe {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 12px 0;
+  display: block;
+}
+
+/* Tiptap Bubble Selection Menu */
+.tiptap__bubble-menu {
+  background-color: var(--container-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  display: flex;
+  column-gap: 0.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 10px rgba(0, 255, 30, 0.1);
+  z-index: 1000;
+}
+
+.tiptap__bubble-btn {
+  background: transparent;
+  border: none;
+  color: var(--title-color);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tiptap__bubble-btn:hover {
+  background-color: rgba(0, 255, 30, 0.08);
+  color: var(--green-color);
+}
+
+.tiptap__bubble-btn.active {
+  background-color: rgba(0, 255, 30, 0.15);
+  color: var(--green-color);
+}
+
+/* Slash suggestions popup menu */
+.tiptap__slash-menu {
+  background-color: var(--container-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 255, 30, 0.15);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25rem;
+  z-index: 3000;
+  width: 220px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tiptap__slash-item {
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  color: var(--title-color);
+  font-family: var(--body-font);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.tiptap__slash-item i {
+  color: var(--text-color-light);
+  font-size: 1.1rem;
+}
+
+.tiptap__slash-item:hover,
+.tiptap__slash-item.selected {
+  background-color: rgba(0, 255, 30, 0.1);
+  color: var(--green-color);
+}
+
+.tiptap__slash-item:hover i,
+.tiptap__slash-item.selected i {
+  color: var(--green-color);
+}
+
+/* Placeholder styling helper */
+.ProseMirror p.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--text-color-light);
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
+  opacity: 0.7;
+}

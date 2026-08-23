@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D PDF Flipbook</title>
+  
+  <!-- Font Icons -->
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+  
+  <!-- PDF.js library -->
+  <script src="/pdfjs/build/pdf.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #0e1630;
+      --card-color: #171f38;
+      --text-color: #f1f1f1;
+      --first-color: #00ff1e;
+      --border-color: #2a3554;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1rem 4.5rem 1rem;
+    }
+
+    /* Flipbook Container */
+    .flipbook-viewport {
+      flex-grow: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+
+    #book {
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+      border-radius: 4px;
+      transition: opacity 0.5s ease;
+      opacity: 0;
+    }
+
+    #book.ready {
+      opacity: 1;
+    }
+
+    .page {
+      background-color: #fff;
+      overflow: hidden;
+      box-shadow: inset 3px 0 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .page canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Navigation Arrows */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background-color: rgba(23, 31, 56, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      z-index: 100;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .nav-arrow:hover {
+      background-color: var(--first-color);
+      color: var(--bg-color);
+      box-shadow: 0 0 12px var(--first-color);
+    }
+
+    .nav-arrow--prev {
+      left: 20px;
+    }
+
+    .nav-arrow--next {
+      right: 20px;
+    }
+
+    /* Toolbar bottom panel */
+    .toolbar {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--card-color);
+      border: 1px solid var(--border-color);
+      border-radius: 2rem;
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      align-items: center;
+      column-gap: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      z-index: 200;
+    }
+
+    .toolbar-item {
+      color: var(--text-color);
+      font-size: 1.25rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease;
+    }
+
+    .toolbar-item:hover {
+      color: var(--first-color);
+    }
+
+    .page-index {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #71878d;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* Pulsing Placeholder Cover styling */
+    .book-placeholder {
+      width: 380px;
+      height: 520px;
+      background-color: var(--card-color);
+      border: 2px dashed rgba(100, 116, 139, 0.35);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #71878d;
+      gap: 1.25rem;
+      animation: pulse 1.6s infinite ease-in-out;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.0); }
+      100% { opacity: 0.6; transform: scale(0.98); }
+    }
+
+    /* Media queries for compact display */
+    @media (max-width: 768px) {
+      .nav-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      .nav-arrow--prev { left: 5px; }
+      .nav-arrow--next { right: 5px; }
+      body { padding: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Placeholder -->
+  <div id="loader" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 300;">
+    <div class="book-placeholder">
+      <i class="uil uil-book-open" style="font-size: 3.5rem; color: var(--first-color); opacity: 0.8;"></i>
+      <span style="font-size: 0.95rem; font-weight: 500; letter-spacing: 0.5px;">Formatting 3D pages...</span>
+    </div>
+  </div>
+
+  <!-- Left/Right Nav Arrows -->
+  <button class="nav-arrow nav-arrow--prev" id="prevBtn" title="Previous Page">
+    <i class="uil uil-angle-left-b"></i>
+  </button>
+  <button class="nav-arrow nav-arrow--next" id="nextBtn" title="Next Page">
+    <i class="uil uil-angle-right-b"></i>
+  </button>
+
+  <!-- Viewport -->
+  <div class="flipbook-viewport">
+    <div id="book"></div>
+  </div>
+
+  <!-- Control Toolbar -->
+  <div class="toolbar">
+    <div class="page-index" id="pageIdx">0 / 0</div>
+    <button class="toolbar-item" id="zoomOut" title="Zoom Out"><i class="uil uil-minus-circle"></i></button>
+    <button class="toolbar-item" id="zoomIn" title="Zoom In"><i class="uil uil-plus-circle"></i></button>
+    <button class="toolbar-item" id="fullscreen" title="Toggle Fullscreen"><i class="uil uil-expand-arrows"></i></button>
+    <button class="toolbar-item" id="download" title="Download File"><i class="uil uil-import"></i></button>
+  </div>
+
+  <!-- StPageFlip Script -->
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js"></script>
+
+  <script>
+    // Initialize PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdfjs/build/pdf.worker.js";
+
+    // Grab file from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileParam = urlParams.get("file");
+
+    let pdfUrl = fileParam || "";
+    let coverUrl = "";
+
+    if (!fileParam) {
+      document.getElementById("loader").innerHTML = "<div>Error: No PDF URL specified.</div>";
+    } else {
+      // Try resolving resource details from local storage cache
+      try {
+        const cachedData = localStorage.getItem("portfolio_cached_data");
+        if (cachedData) {
+          const parsed = JSON.parse(cachedData);
+          const resources = parsed.resources || [];
+          const match = resources.find((r) => r.id === fileParam || r.pdfUrl === fileParam);
+          if (match) {
+            pdfUrl = match.pdfUrl;
+            coverUrl = match.thumbnailUrl || "";
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to parse cache in flipbook viewer:", e);
+      }
+
+      loadBook();
+    }
+
+    async function loadBook() {
+      const isGoogleDrive = pdfUrl.includes("drive.google.com") || pdfUrl.includes("googleapis.com");
+
+      if (isGoogleDrive) {
+        // Extract fileId from the URL
+        let fileId = "";
+        if (pdfUrl.includes("id=")) {
+          fileId = pdfUrl.split("id=")[1]?.split("&")[0];
+        } else if (pdfUrl.includes("/file/d/")) {
+          fileId = pdfUrl.split("/file/d/")[1]?.split("/")[0];
+        }
+
+        // 1. Try local dev server proxy if on localhost
+        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+          const idx = pdfUrl.indexOf("/uc?");
+          if (idx !== -1) {
+            const localUrl = "/gdrive" + pdfUrl.substring(idx);
+            try {
+              console.log("Attempting local Vite proxy...");
+              await attemptLoad(localUrl);
+              return;
+            } catch (e) {
+              console.warn("Local Vite proxy failed, falling back to public CORS proxies...", e);
+            }
+          }
+        }
+        
+        // 2. In production, use the direct usercontent download URL to bypass 303 redirects and CORS errors
+        if (fileId) {
+          const directUrl = `https://drive.usercontent.google.com/download?id=${fileId}&export=download`;
+          const proxies = [
+            (url) => "https://corsproxy.io/?url=" + encodeURIComponent(url),
+            (url) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)
+          ];
+
+          for (let i = 0; i < proxies.length; i++) {
+            try {
+              const proxiedUrl = proxies[i](directUrl);
+              console.log(`Attempting load via direct URL through public CORS proxy ${i + 1}...`);
+              await attemptLoad(proxiedUrl);
+              return;
+            } catch (e) {
+              console.warn(`Public CORS proxy ${i + 1} failed:`, e);
+            }
+          }
+        }
+
+        // 3. Fallback: Redirect to Google Drive preview iframe if all download proxies fail
+        console.warn("All CORS proxies failed to load the binary stream. Falling back to Google Drive default preview...");
+        redirectToGooglePreview();
+      } else {
+        // Direct PDF URL
+        try {
+          await attemptLoad(pdfUrl);
+        } catch (e) {
+          console.warn("Direct PDF fetch failed (CORS block), trying public CORS proxies...", e);
+          const proxies = [
+            (url) => "https://corsproxy.io/?url=" + encodeURIComponent(url),
+            (url) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)
+          ];
+          for (let i = 0; i < proxies.length; i++) {
+            try {
+              await attemptLoad(proxies[i](pdfUrl));
+              return;
+            } catch (err) {
+              console.warn(`Proxy ${i + 1} failed for external PDF:`, err);
+            }
+          }
+          document.getElementById("loader").innerHTML = `<div style="color: #ff3838;">Rendering failed: ${e.message}</div>`;
+        }
+      }
+    }
+
+    function redirectToGooglePreview() {
+      let fileId = "";
+      if (pdfUrl.includes("id=")) {
+        fileId = pdfUrl.split("id=")[1]?.split("&")[0];
+      } else if (pdfUrl.includes("/file/d/")) {
+        fileId = pdfUrl.split("/file/d/")[1]?.split("/")[0];
+      }
+      if (fileId) {
+        window.location.replace(`https://drive.google.com/file/d/${fileId}/preview`);
+      } else {
+        document.getElementById("loader").innerHTML = `<div style="color: #ff3838;">All proxies failed and file ID could not be parsed for Google preview.</div>`;
+      }
+    }
+
+    async function attemptLoad(targetUrl) {
+      const loadingTask = pdfjsLib.getDocument(targetUrl);
+      const pdf = await loadingTask.promise;
+      const totalPages = pdf.numPages;
+      const bookDiv = document.getElementById("book");
+
+      // Clear book container in case of multiple retries
+      bookDiv.innerHTML = "";
+
+      // Prepend cover page at index 0 if coverUrl is specified
+      if (coverUrl && coverUrl.trim() !== "") {
+        const coverDiv = document.createElement("div");
+        coverDiv.className = "page";
+        coverDiv.setAttribute("data-page", 0);
+        
+        const img = document.createElement("img");
+        img.src = coverUrl;
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        coverDiv.appendChild(img);
+        bookDiv.appendChild(coverDiv);
+      }
+
+      // Grab first page to calculate aspect ratio
+      const firstPage = await pdf.getPage(1);
+      const originalViewport = firstPage.getViewport({ scale: 1.0 });
+      
+      // Target dynamic sizing based on viewport height and width (subtracting margins to prevent overflow)
+      const viewportEl = document.querySelector(".flipbook-viewport");
+      const baseHeight = Math.max(Math.min(viewportEl.clientHeight - 20, 750), 300);
+      const aspectRatio = originalViewport.width / originalViewport.height;
+      const baseWidth = baseHeight * aspectRatio;
+
+      // Provision container pages sequentially
+      const pagePromises = [];
+      for (let i = 1; i <= totalPages; i++) {
+        const pageDiv = document.createElement("div");
+        pageDiv.className = "page";
+        pageDiv.setAttribute("data-page", i);
+        
+        const canvas = document.createElement("canvas");
+        pageDiv.appendChild(canvas);
+        bookDiv.appendChild(pageDiv);
+
+        // We load the rendering sequentially but non-blocking
+        pagePromises.push((async () => {
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({ scale: 1.5 }); // High-definition render
+          
+          const context = canvas.getContext("2d");
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          await page.render(renderContext).promise;
+        })());
+      }
+
+      // Wait for first 2 pages to render before mounting StPageFlip for visual latency reduction
+      await Promise.all(pagePromises.slice(0, Math.min(2, totalPages)));
+
+      // Remove loader
+      document.getElementById("loader").style.display = "none";
+      bookDiv.classList.add("ready");
+
+      // Initialize PageFlip
+      const pageFlip = new St.PageFlip(bookDiv, {
+        width: Math.round(baseWidth),
+        height: Math.round(baseHeight),
+        size: "stretch",
+        minWidth: 280,
+        maxWidth: 900,
+        minHeight: 380,
+        maxHeight: 1200,
+        maxShadowOpacity: 0.4,
+        showCover: true,
+        mobileScrollSupport: false
+      });
+
+      pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+      // Setup Toolbar controls
+      const pageIdxSpan = document.getElementById("pageIdx");
+      
+      const updateToolbar = () => {
+        const current = pageFlip.getCurrentPageIndex();
+        const total = pageFlip.getPageCount();
+        pageIdxSpan.textContent = `${current + 1} / ${total}`;
+      };
+
+      updateToolbar();
+
+      pageFlip.on("flip", () => {
+        updateToolbar();
+      });
+
+      // Left/Right Nav controls
+      document.getElementById("prevBtn").addEventListener("click", () => pageFlip.flipPrev());
+      document.getElementById("nextBtn").addEventListener("click", () => pageFlip.flipNext());
+
+      // Keyboard nav
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") pageFlip.flipPrev();
+        if (e.key === "ArrowRight") pageFlip.flipNext();
+      });
+
+      // Zoom Controls (simply scaling the container dynamically)
+      let currentScale = 1.0;
+      document.getElementById("zoomIn").addEventListener("click", () => {
+        if (currentScale < 1.4) {
+          currentScale += 0.1;
+          bookDiv.style.transform = `scale(${currentScale})`;
+        }
+      });
+      document.getElementById("zoomOut").addEventListener("click", () => {
+        if (currentScale > 0.7) {
+          currentScale -= 0.1;
+          bookDiv.style.transform = `scale(${currentScale})`;
+        }
+      });
+
+      // Fullscreen Mode
+      document.getElementById("fullscreen").addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {
+            console.warn("Fullscreen toggle failed:", err);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      // Direct Download Action
+      document.getElementById("download").addEventListener("click", () => {
+        const a = document.createElement("a");
+        a.href = pdfUrl;
+        a.target = "_blank";
+        a.download = pdfUrl.split("/").pop() || "document.pdf";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      // Load the remaining pages in background asynchronously
+      Promise.all(pagePromises.slice(2));
+    }
+  </script>
+</body>
+</html>

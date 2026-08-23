@@ -1,0 +1,5 @@
+/* Empty global styles fallback (styling is fully managed by styled-components GlobalStyle and scoped css files) */
+body {
+  margin: 0;
+  padding: 0;
+}

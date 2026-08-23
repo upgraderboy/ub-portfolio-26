@@ -1,0 +1,71 @@
+.testimonial__container {
+    width: 100%;
+    max-width: 968px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 3rem; /* Space for pagination bullets */
+}
+
+.testimonial__card {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    border-radius: 1.5rem;
+    margin-bottom: var(--mb-1);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
+}
+
+.testimonial__card:hover {
+    transform: translateY(-5px);
+    border-color: var(--green-color);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial__img {
+    border: 2px solid #71878D;
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: var(--mb-0-5);
+}
+
+.testimonial__name {
+    font-size: var(--normal-font-size);
+    font-weight: var(--font-medium);
+    color: var(--title-color);
+    margin-bottom: var(--mb-0-25);
+}
+
+.testimonial__description {
+    font-size: var(--small-font-size);
+    color: var(--font-color);
+    line-height: 1.4;
+}
+
+/* Swiper Pagination Class Customization */
+.swiper-pagination-bullet {
+    background-color: var(--border-color) !important;
+    opacity: 0.6;
+    width: 10px;
+    height: 10px;
+    transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+    background-color: var(--green-color) !important;
+    opacity: 1;
+    width: 24px;
+    border-radius: 5px;
+}
+
+/* BREAKPOINTS */
+@media screen and (max-width: 992px) {
+    .testimonial__card {
+        padding: 1.25rem 1.5rem;
+    }
+}
