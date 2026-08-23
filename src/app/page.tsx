@@ -25,7 +25,6 @@ export default function LandingPage() {
       <Header currentRoute="/" navigate={navigate} />
       <main>
         <Home />
-        <Terminal />
         <About />
         <Skills />
         <Services />
@@ -35,6 +34,7 @@ export default function LandingPage() {
         <BlogsSection navigate={navigate} />
         <ResourcesSection navigate={navigate} />
         <Testimonials />
+        <Terminal />
         <Contact />
       </main>
       <Footer navigate={navigate} />

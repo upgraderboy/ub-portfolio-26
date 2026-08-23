@@ -304,15 +304,6 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
                   </li>
                   <li className="nav__item">
                     <a
-                      href="#terminal"
-                      onClick={(e) => handleNavClick(e, "#terminal")}
-                      className={activeNav === "#terminal" ? "nav__link active-link" : "nav__link"}
-                    >
-                      <i className="uil uil-terminal nav__icon"></i>Console
-                    </a>
-                  </li>
-                  <li className="nav__item">
-                    <a
                       href="#skills"
                       onClick={(e) => handleNavClick(e, "#skills")}
                       className={activeNav === "#skills" ? "nav__link active-link" : "nav__link"}
@@ -345,6 +336,15 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
                       className={activeNav === "#blogs" ? "nav__link active-link" : "nav__link"}
                     >
                       <i className="uil uil-book-reader nav__icon"></i>Blogs
+                    </a>
+                  </li>
+                  <li className="nav__item">
+                    <a
+                      href="#terminal"
+                      onClick={(e) => handleNavClick(e, "#terminal")}
+                      className={activeNav === "#terminal" ? "nav__link active-link" : "nav__link"}
+                    >
+                      <i className="uil uil-terminal nav__icon"></i>Console
                     </a>
                   </li>
                   <li className="nav__item">
