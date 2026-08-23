@@ -1,8 +1,43 @@
-// Print detected environment keys to help user verify names on Render
-const envKeys = Object.keys(process.env).filter(
-  (key) => key.includes("VITE") || key.includes("FIREBASE") || key.includes("NEXT_PUBLIC")
-);
-console.log("Detected Build-time Environment Keys:", envKeys);
+// Fuzzy match and resolve Firebase configuration keys from process.env
+let apiKey = "";
+let authDomain = "";
+let projectId = "";
+let storageBucket = "";
+let messagingSenderId = "";
+let appId = "";
+let measurementId = "";
+
+for (const key of Object.keys(process.env)) {
+  const normalized = key.toUpperCase().trim();
+  const value = (process.env[key] || "").trim();
+  if (!value) continue;
+
+  if (normalized.includes("API") && normalized.includes("KEY")) {
+    apiKey = value;
+  } else if (normalized.includes("AUTH") && normalized.includes("DOMAIN")) {
+    authDomain = value;
+  } else if (normalized.includes("PROJECT") && normalized.includes("ID")) {
+    projectId = value;
+  } else if (normalized.includes("STORAGE") && normalized.includes("BUCKET")) {
+    storageBucket = value;
+  } else if (normalized.includes("MESSAGING") && (normalized.includes("SENDER") || normalized.includes("SND"))) {
+    messagingSenderId = value;
+  } else if (normalized.includes("APP") && normalized.includes("ID") && !normalized.includes("PROJECT")) {
+    appId = value;
+  } else if (normalized.includes("MEASUREMENT") && normalized.includes("ID")) {
+    measurementId = value;
+  }
+}
+
+console.log("Fuzzy Env Resolver Results:", {
+  hasApiKey: !!apiKey,
+  hasAuthDomain: !!authDomain,
+  hasProjectId: !!projectId,
+  hasStorageBucket: !!storageBucket,
+  hasMessagingSenderId: !!messagingSenderId,
+  hasAppId: !!appId,
+  hasMeasurementId: !!measurementId
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -19,21 +54,21 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   env: {
-    NEXT_PUBLIC_VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_VITE_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
-    NEXT_PUBLIC_VITE_FIREBASE_AUTH_DOMAIN: process.env.VITE_FIREBASE_AUTH_DOMAIN || process.env.NEXT_PUBLIC_VITE_FIREBASE_AUTH_DOMAIN || process.env.FIREBASE_AUTH_DOMAIN || process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
-    NEXT_PUBLIC_VITE_FIREBASE_PROJECT_ID: process.env.VITE_FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
-    NEXT_PUBLIC_VITE_FIREBASE_STORAGE_BUCKET: process.env.VITE_FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_VITE_FIREBASE_STORAGE_BUCKET || process.env.FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
-    NEXT_PUBLIC_VITE_FIREBASE_MESSAGING_SENDER_ID: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_MESSAGING_SENDER_ID || process.env.FIREBASE_MESSAGING_SENDER_ID || process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-    NEXT_PUBLIC_VITE_FIREBASE_APP_ID: process.env.VITE_FIREBASE_APP_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_APP_ID || process.env.FIREBASE_APP_ID || process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
-    NEXT_PUBLIC_VITE_FIREBASE_MEASUREMENT_ID: process.env.VITE_FIREBASE_MEASUREMENT_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_MEASUREMENT_ID || process.env.FIREBASE_MEASUREMENT_ID || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "",
+    NEXT_PUBLIC_VITE_FIREBASE_API_KEY: apiKey,
+    NEXT_PUBLIC_VITE_FIREBASE_AUTH_DOMAIN: authDomain,
+    NEXT_PUBLIC_VITE_FIREBASE_PROJECT_ID: projectId,
+    NEXT_PUBLIC_VITE_FIREBASE_STORAGE_BUCKET: storageBucket,
+    NEXT_PUBLIC_VITE_FIREBASE_MESSAGING_SENDER_ID: messagingSenderId,
+    NEXT_PUBLIC_VITE_FIREBASE_APP_ID: appId,
+    NEXT_PUBLIC_VITE_FIREBASE_MEASUREMENT_ID: measurementId,
     
-    VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_VITE_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
-    VITE_FIREBASE_AUTH_DOMAIN: process.env.VITE_FIREBASE_AUTH_DOMAIN || process.env.NEXT_PUBLIC_VITE_FIREBASE_AUTH_DOMAIN || process.env.FIREBASE_AUTH_DOMAIN || process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
-    VITE_FIREBASE_PROJECT_ID: process.env.VITE_FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
-    VITE_FIREBASE_STORAGE_BUCKET: process.env.VITE_FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_VITE_FIREBASE_STORAGE_BUCKET || process.env.FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
-    VITE_FIREBASE_MESSAGING_SENDER_ID: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_MESSAGING_SENDER_ID || process.env.FIREBASE_MESSAGING_SENDER_ID || process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-    VITE_FIREBASE_APP_ID: process.env.VITE_FIREBASE_APP_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_APP_ID || process.env.FIREBASE_APP_ID || process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
-    VITE_FIREBASE_MEASUREMENT_ID: process.env.VITE_FIREBASE_MEASUREMENT_ID || process.env.NEXT_PUBLIC_VITE_FIREBASE_MEASUREMENT_ID || process.env.FIREBASE_MEASUREMENT_ID || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "",
+    VITE_FIREBASE_API_KEY: apiKey,
+    VITE_FIREBASE_AUTH_DOMAIN: authDomain,
+    VITE_FIREBASE_PROJECT_ID: projectId,
+    VITE_FIREBASE_STORAGE_BUCKET: storageBucket,
+    VITE_FIREBASE_MESSAGING_SENDER_ID: messagingSenderId,
+    VITE_FIREBASE_APP_ID: appId,
+    VITE_FIREBASE_MEASUREMENT_ID: measurementId,
   },
 };
 
