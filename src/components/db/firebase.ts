@@ -62,14 +62,4 @@ if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "PLACEHOLDER") {
   );
 }
 
-if (typeof window !== "undefined") {
-  console.log("Firebase Client Configuration Status:", {
-    hasApiKey: !!firebaseConfig.apiKey,
-    apiKeyPrefix: firebaseConfig.apiKey ? firebaseConfig.apiKey.substring(0, 6) : "none",
-    hasAuthDomain: !!firebaseConfig.authDomain,
-    hasProjectId: !!firebaseConfig.projectId,
-    isFirebaseConfigured
-  });
-}
-
 export { db, storage, auth, isFirebaseConfigured };
