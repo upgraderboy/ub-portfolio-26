@@ -173,7 +173,6 @@ const Terminal: React.FC = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              autoFocus
               autoComplete="off"
               autoCapitalize="none"
               spellCheck="false"

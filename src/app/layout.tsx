@@ -45,8 +45,10 @@ export default async function RootLayout({
                   // Resolve Accent Color
                   var accentColor = localStorage.getItem('portfolio_accent_color');
                   if (accentColor) {
-                    document.documentElement.style.setProperty('--green-color', accentColor);
-                    document.documentElement.style.setProperty('--btn-color', accentColor);
+                    var style = document.createElement('style');
+                    style.id = 'custom-accent-color-style';
+                    style.innerHTML = ':root, [data-theme="dark"] { --green-color: ' + accentColor + ' !important; --btn-color: ' + accentColor + ' !important; } [data-theme="dark"] { --text-color: ' + accentColor + ' !important; }';
+                    document.head.appendChild(style);
                   }
                   
                   // Double apply on DOM content loaded

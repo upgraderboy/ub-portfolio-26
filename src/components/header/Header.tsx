@@ -50,6 +50,9 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
           --green-color: ${savedColor} !important;
           --btn-color: ${savedColor} !important;
         }
+        [data-theme="dark"] {
+          --text-color: ${savedColor} !important;
+        }
       `;
     }
   }, []);
@@ -161,6 +164,9 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
       :root, [data-theme="dark"] {
         --green-color: ${color} !important;
         --btn-color: ${color} !important;
+      }
+      [data-theme="dark"] {
+        --text-color: ${color} !important;
       }
     `;
     
