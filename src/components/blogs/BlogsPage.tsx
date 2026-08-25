@@ -133,7 +133,18 @@ const BlogsPage: React.FC<BlogsPageProps> = ({ navigate }) => {
             <div className="blogs__grid">
               {filteredBlogs.map((blog) => (
                 <div className="blog__card" key={blog.id}>
+                  {/* Technical cyber corners */}
+                  <div className="blog__card-corner blog__card-corner--tl"></div>
+                  <div className="blog__card-corner blog__card-corner--tr"></div>
+                  <div className="blog__card-corner blog__card-corner--bl"></div>
+                  <div className="blog__card-corner blog__card-corner--br"></div>
+
                   <div className="blog__card-img-wrapper">
+                    {/* Floating Date Badge */}
+                    <span className="blog__card-badge">
+                      <i className="uil uil-calendar-alt"></i> {blog.date}
+                    </span>
+
                     {blog.coverImage ? (
                       <img src={blog.coverImage} alt={blog.title} className="blog__card-img" />
                     ) : (
@@ -155,9 +166,6 @@ const BlogsPage: React.FC<BlogsPageProps> = ({ navigate }) => {
                   </div>
 
                   <div className="blog__card-content">
-                    <span className="blog__card-date">
-                      <i className="uil uil-calendar-alt"></i> {blog.date}
-                    </span>
                     <h3 className="blog__card-title">{blog.title}</h3>
                     <p className="blog__card-excerpt">{getExcerpt(blog.content)}</p>
                     <div className="blog__card-link" onClick={() => navigate(`/blogs/${blog.id}`)}>
