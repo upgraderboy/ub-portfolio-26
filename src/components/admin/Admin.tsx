@@ -658,16 +658,25 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
       });
   };
 
-  const checkCategoryNameExists = (nodes: any[], name: string): boolean => {
-    for (const node of nodes) {
-      if (node.name.toLowerCase() === name.toLowerCase()) {
-        return true;
-      }
-      if (node.children && node.children.length > 0) {
-        if (checkCategoryNameExists(node.children, name)) {
-          return true;
+  const checkCategoryNameExists = (nodes: any[], parentId: string | null, name: string): boolean => {
+    if (!parentId) {
+      return nodes.some((node) => node.name.toLowerCase() === name.toLowerCase());
+    }
+    
+    const findNode = (tree: any[], id: string): any => {
+      for (const node of tree) {
+        if (node.id === id) return node;
+        if (node.children && node.children.length > 0) {
+          const match = findNode(node.children, id);
+          if (match) return match;
         }
       }
+      return null;
+    };
+    
+    const parentNode = findNode(nodes, parentId);
+    if (parentNode && parentNode.children) {
+      return parentNode.children.some((child: any) => child.name.toLowerCase() === name.toLowerCase());
     }
     return false;
   };
@@ -744,8 +753,8 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
     const nameTrim = newCategoryName.trim();
     if (!nameTrim) return;
 
-    if (checkCategoryNameExists(categories, nameTrim)) {
-      alert(`Category "${nameTrim}" already exists in the hierarchy.`);
+    if (checkCategoryNameExists(categories, selectedParentCategory, nameTrim)) {
+      alert(`Category "${nameTrim}" already exists at this level.`);
       return;
     }
 
@@ -3683,117 +3692,67 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
                 <div className="admin__form-group admin__form-group--full">
                   <label className="admin__form-label">Category Path Assignment *</label>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
-                    {/* Selector Level 1 */}
-                    <select
-                      className="admin__form-input"
-                      style={{ minWidth: "150px", flex: 1 }}
-                      value={resCategoryPath[0] || ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setResCategoryPath(val ? [val] : []);
-                      }}
-                      required
-                    >
-                      <option value="">-- Choose Root Category --</option>
-                      {(portfolioData.resourceCategories || []).map((cat) => (
-                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                      ))}
-                    </select>
-
-                    {/* Selector Level 2 */}
-                    {resCategoryPath.length > 0 && (() => {
-                      const root = (portfolioData.resourceCategories || []).find((c) => c.id === resCategoryPath[0]);
-                      if (root && root.children && root.children.length > 0) {
-                        return (
-                          <>
+                    {/* Render Category Cascader Recursively for Unlimited Subcategories */}
+                    {(() => {
+                      const dropdowns: React.ReactNode[] = [];
+                      let currentNodes = portfolioData.resourceCategories || [];
+                      
+                      // Always render Level 1
+                      dropdowns.push(
+                        <select
+                          key="level-0"
+                          className="admin__form-input"
+                          style={{ minWidth: "150px", flex: 1 }}
+                          value={resCategoryPath[0] || ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setResCategoryPath(val ? [val] : []);
+                          }}
+                        >
+                          <option value="">-- Choose Category (L1) --</option>
+                          {currentNodes.map((cat) => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                          ))}
+                        </select>
+                      );
+                      
+                      // Render subsequent levels based on active selection path
+                      for (let i = 0; i < resCategoryPath.length; i++) {
+                        const activeId = resCategoryPath[i];
+                        const activeNode = currentNodes.find((n) => n.id === activeId);
+                        if (!activeNode || !activeNode.children || activeNode.children.length === 0) {
+                          break;
+                        }
+                        
+                        currentNodes = activeNode.children;
+                        const levelIdx = i + 1;
+                        
+                        dropdowns.push(
+                          <React.Fragment key={`level-frag-${levelIdx}`}>
                             <i className="uil uil-angle-right" style={{ color: "var(--text-color-light)" }}></i>
                             <select
                               className="admin__form-input"
                               style={{ minWidth: "150px", flex: 1 }}
-                              value={resCategoryPath[1] || ""}
+                              value={resCategoryPath[levelIdx] || ""}
                               onChange={(e) => {
                                 const val = e.target.value;
+                                const newPath = resCategoryPath.slice(0, levelIdx);
                                 if (val) {
-                                  setResCategoryPath([resCategoryPath[0], val]);
-                                } else {
-                                  setResCategoryPath([resCategoryPath[0]]);
+                                  newPath.push(val);
                                 }
+                                setResCategoryPath(newPath);
                               }}
                             >
-                              <option value="">-- Choose Subcategory (L2) --</option>
-                              {root.children.map((child) => (
-                                <option key={child.id} value={child.id}>{child.name}</option>
+                              <option value="">{`-- Choose Subcategory (L${levelIdx + 1}) --`}</option>
+                              {currentNodes.map((cat) => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
                               ))}
                             </select>
-                          </>
+                          </React.Fragment>
                         );
                       }
-                      return null;
-                    })()}
-
-                    {/* Selector Level 3 */}
-                    {resCategoryPath.length > 1 && (() => {
-                      const root = (portfolioData.resourceCategories || []).find((c) => c.id === resCategoryPath[0]);
-                      const sub = root?.children?.find((c) => c.id === resCategoryPath[1]);
-                      if (sub && sub.children && sub.children.length > 0) {
-                        return (
-                          <>
-                            <i className="uil uil-angle-right" style={{ color: "var(--text-color-light)" }}></i>
-                            <select
-                              className="admin__form-input"
-                              style={{ minWidth: "150px", flex: 1 }}
-                              value={resCategoryPath[2] || ""}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (val) {
-                                  setResCategoryPath([resCategoryPath[0], resCategoryPath[1], val]);
-                                } else {
-                                  setResCategoryPath([resCategoryPath[0], resCategoryPath[1]]);
-                                }
-                              }}
-                            >
-                              <option value="">-- Choose Subcategory (L3) --</option>
-                              {sub.children.map((child) => (
-                                <option key={child.id} value={child.id}>{child.name}</option>
-                              ))}
-                            </select>
-                          </>
-                        );
-                      }
-                      return null;
-                    })()}
-
-                    {/* Selector Level 4 */}
-                    {resCategoryPath.length > 2 && (() => {
-                      const root = (portfolioData.resourceCategories || []).find((c) => c.id === resCategoryPath[0]);
-                      const sub = root?.children?.find((c) => c.id === resCategoryPath[1]);
-                      const subSub = sub?.children?.find((c) => c.id === resCategoryPath[2]);
-                      if (subSub && subSub.children && subSub.children.length > 0) {
-                        return (
-                          <>
-                            <i className="uil uil-angle-right" style={{ color: "var(--text-color-light)" }}></i>
-                            <select
-                              className="admin__form-input"
-                              style={{ minWidth: "150px", flex: 1 }}
-                              value={resCategoryPath[3] || ""}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (val) {
-                                  setResCategoryPath([resCategoryPath[0], resCategoryPath[1], resCategoryPath[2], val]);
-                                } else {
-                                  setResCategoryPath([resCategoryPath[0], resCategoryPath[1], resCategoryPath[2]]);
-                                }
-                              }}
-                            >
-                              <option value="">-- Choose Subcategory (L4) --</option>
-                              {subSub.children.map((child) => (
-                                <option key={child.id} value={child.id}>{child.name}</option>
-                              ))}
-                            </select>
-                          </>
-                        );
-                      }
-                      return null;
+                      
+                      return dropdowns;
                     })()}
                   </div>
                   <span className="admin__content-subtitle" style={{ marginTop: "0.5rem", display: "block" }}>
