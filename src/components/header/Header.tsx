@@ -54,6 +54,12 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
           --text-color: ${savedColor} !important;
         }
       `;
+
+      // Restore active hash navigation highlight on reload
+      const hash = window.location.hash;
+      if (hash) {
+        setActiveNav(hash);
+      }
     }
   }, []);
 

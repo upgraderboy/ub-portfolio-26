@@ -7985,7 +7985,7 @@ class CanvasGraphics {
       (0, _util.info)("TODO: Support non-isolated groups.");
     }
     if (group.knockout) {
-      (0, _util.warn)("Knockout groups not supported.");
+      // (0, _util.warn)("Knockout groups not supported.");
     }
     const currentTransform = (0, _display_utils.getCurrentTransform)(currentCtx);
     if (group.matrix) {

@@ -56,6 +56,7 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
 
   // Auth State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthChecking, setIsAuthChecking] = useState<boolean>(true);
   const [usernameInput, setUsernameInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [authError, setAuthError] = useState<string>("");
@@ -70,6 +71,13 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
 
   // Navigation State (Active Tab)
   const [activeTab, setActiveTab] = useState<string>("home-about");
+
+  const changeTab = (tab: string) => {
+    setActiveTab(tab);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("admin_active_tab", tab);
+    }
+  };
 
   // Form Edit/Add States
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -247,6 +255,14 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
     if (loggedIn === "true") {
       setIsAuthenticated(true);
     }
+    
+    // Load persisted active tab on mount
+    const savedTab = localStorage.getItem("admin_active_tab");
+    if (savedTab) {
+      setActiveTab(savedTab);
+    }
+    
+    setIsAuthChecking(false);
   }, []);
 
   // Update states when portfolio data loads/changes
@@ -1135,6 +1151,15 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
     setBlogStatus("public");
   };
 
+  // Render clean loader while resolving session storage auth status to prevent login card flashing
+  if (isAuthChecking) {
+    return (
+      <div className="admin__login-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+        <div className="portfolio-loader-circle" style={{ width: "40px", height: "40px" }} />
+      </div>
+    );
+  }
+
   // Render Login Card if not Authenticated
   if (!isAuthenticated) {
     return (
@@ -1295,67 +1320,67 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
         <div className="admin__nav">
           <div
             className={`admin__nav-item ${activeTab === "home-about" ? "active" : ""}`}
-            onClick={() => setActiveTab("home-about")}
+            onClick={() => changeTab("home-about")}
           >
             <i className="uil uil-home"></i> Home & About
           </div>
           <div
             className={`admin__nav-item ${activeTab === "skills-qual" ? "active" : ""}`}
-            onClick={() => setActiveTab("skills-qual")}
+            onClick={() => changeTab("skills-qual")}
           >
             <i className="uil uil-file-alt"></i> Skills & Journey
           </div>
           <div
             className={`admin__nav-item ${activeTab === "projects" ? "active" : ""}`}
-            onClick={() => setActiveTab("projects")}
+            onClick={() => changeTab("projects")}
           >
             <i className="uil uil-scenery"></i> Projects (Portfolio)
           </div>
           <div
             className={`admin__nav-item ${activeTab === "testimonials" ? "active" : ""}`}
-            onClick={() => setActiveTab("testimonials")}
+            onClick={() => changeTab("testimonials")}
           >
             <i className="uil uil-comment-message"></i> Testimonials
           </div>
           <div
             className={`admin__nav-item ${activeTab === "memories" ? "active" : ""}`}
-            onClick={() => setActiveTab("memories")}
+            onClick={() => changeTab("memories")}
           >
             <i className="uil uil-image-v"></i> Memories
           </div>
           <div
             className={`admin__nav-item ${activeTab === "blogs" ? "active" : ""}`}
-            onClick={() => setActiveTab("blogs")}
+            onClick={() => changeTab("blogs")}
           >
             <i className="uil uil-book-open"></i> Blogs Section
           </div>
           <div
             className={`admin__nav-item ${activeTab === "seo" ? "active" : ""}`}
-            onClick={() => setActiveTab("seo")}
+            onClick={() => changeTab("seo")}
           >
             <i className="uil uil-search"></i> Google SEO
           </div>
           <div
             className={`admin__nav-item ${activeTab === "sitemap" ? "active" : ""}`}
-            onClick={() => setActiveTab("sitemap")}
+            onClick={() => changeTab("sitemap")}
           >
             <i className="uil uil-sitemap"></i> Sitemap Manager
           </div>
           <div
             className={`admin__nav-item ${activeTab === "resources" ? "active" : ""}`}
-            onClick={() => setActiveTab("resources")}
+            onClick={() => changeTab("resources")}
           >
             <i className="uil uil-file-bookmark-alt"></i> Resources Catalog
           </div>
           <div
             className={`admin__nav-item ${activeTab === "console" ? "active" : ""}`}
-            onClick={() => setActiveTab("console")}
+            onClick={() => changeTab("console")}
           >
             <i className="uil uil-terminal"></i> Console Manager
           </div>
           <div
             className={`admin__nav-item ${activeTab === "security" ? "active" : ""}`}
-            onClick={() => setActiveTab("security")}
+            onClick={() => changeTab("security")}
           >
             <i className="uil uil-key-skeleton"></i> Account Security
           </div>
@@ -3630,7 +3655,7 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
                 {/* PDF URL Input / Local Uploader */}
                 <div className="admin__form-group admin__form-group--full">
                   <label className="admin__form-label">PDF File Document * (URL or Local File Upload)</label>
-                  <div style={{ display: "flex", columnGap: "0.5rem" }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
                     <input
                       type="text"
                       className="admin__form-input"
@@ -3638,7 +3663,7 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
                       value={resPdfUrl.startsWith("data:") ? "Local PDF Document File Uploaded" : resPdfUrl}
                       onChange={(e) => setResPdfUrl(e.target.value)}
                       disabled={resPdfUrl.startsWith("data:")}
-                      style={{ flexGrow: 1 }}
+                      style={{ flexGrow: 1, minWidth: "220px" }}
                       required
                     />
                     <label className="memories__form-file-label" style={{ display: "flex", alignItems: "center", whiteSpace: "nowrap", cursor: "pointer" }}>
@@ -3661,7 +3686,7 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
                 {/* Cover Thumbnail Image URL Input / Local Uploader */}
                 <div className="admin__form-group admin__form-group--full">
                   <label className="admin__form-label">PDF Cover Image Thumbnail (URL or Local Image Upload)</label>
-                  <div style={{ display: "flex", columnGap: "0.5rem" }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
                     <input
                       type="text"
                       className="admin__form-input"
@@ -3669,7 +3694,7 @@ const Admin: React.FC<AdminProps> = ({ navigate }) => {
                       value={resThumbnailUrl.startsWith("data:") ? "Local Image File Uploaded" : resThumbnailUrl}
                       onChange={(e) => setResThumbnailUrl(e.target.value)}
                       disabled={resThumbnailUrl.startsWith("data:")}
-                      style={{ flexGrow: 1 }}
+                      style={{ flexGrow: 1, minWidth: "220px" }}
                     />
                     <label className="memories__form-file-label" style={{ display: "flex", alignItems: "center", whiteSpace: "nowrap", cursor: "pointer" }}>
                       <i className="uil uil-image-plus"></i> Upload Image
