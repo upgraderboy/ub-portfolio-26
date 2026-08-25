@@ -297,6 +297,7 @@
 
 /* 3D Book Design Card Layout */
 .resources__book-card {
+  position: relative;
   background-color: var(--container-color);
   border: 1px solid rgba(100, 116, 139, 0.12);
   border-radius: 1.25rem;
@@ -305,12 +306,13 @@
   column-gap: 2rem;
   align-items: center;
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
 }
 
 .resources__book-card:hover {
   transform: translateY(-8px);
   border-color: var(--green-color);
-  box-shadow: 0 15px 35px rgba(1, 195, 105, 0.1);
+  box-shadow: 0 15px 35px color-mix(in srgb, var(--green-color) 15%, transparent);
 }
 
 /* 3D Book wrapper & perspective */
@@ -529,4 +531,100 @@
   .resources__book-actions {
     justify-content: center;
   }
+}
+
+/* Category Filter Tabs */
+.resources__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+  margin-top: -1rem;
+}
+
+.resources__tab-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  color: var(--text-color);
+  font-size: var(--small-font-size);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: inline-flex;
+  align-items: center;
+  column-gap: 0.35rem;
+  outline: none;
+}
+
+.resources__tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--green-color);
+  color: var(--green-color);
+}
+
+.resources__tab-btn.active {
+  background: var(--green-color);
+  border-color: var(--green-color);
+  color: #fff !important;
+  box-shadow: 0 0 12px var(--green-color);
+}
+
+/* Cyber corner accents */
+.resources__card-corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid transparent;
+  transition: border-color 0.3s ease;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.resources__card-corner--tl {
+  top: 8px;
+  left: 8px;
+  border-top-color: var(--border-color);
+  border-left-color: var(--border-color);
+}
+
+.resources__card-corner--tr {
+  top: 8px;
+  right: 8px;
+  border-top-color: var(--border-color);
+  border-right-color: var(--border-color);
+}
+
+.resources__card-corner--bl {
+  bottom: 8px;
+  left: 8px;
+  border-bottom-color: var(--border-color);
+  border-left-color: var(--border-color);
+}
+
+.resources__card-corner--br {
+  bottom: 8px;
+  right: 8px;
+  border-bottom-color: var(--border-color);
+  border-right-color: var(--border-color);
+}
+
+.resources__book-card:hover .resources__card-corner--tl {
+  border-top-color: var(--green-color);
+  border-left-color: var(--green-color);
+}
+.resources__book-card:hover .resources__card-corner--tr {
+  border-top-color: var(--green-color);
+  border-right-color: var(--green-color);
+}
+.resources__book-card:hover .resources__card-corner--bl {
+  border-bottom-color: var(--green-color);
+  border-left-color: var(--green-color);
+}
+.resources__book-card:hover .resources__card-corner--br {
+  border-bottom-color: var(--green-color);
+  border-right-color: var(--green-color);
 }

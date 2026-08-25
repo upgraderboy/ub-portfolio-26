@@ -8,15 +8,18 @@ interface ResourcesSectionProps {
 
 const ResourcesSection: React.FC<ResourcesSectionProps> = ({ navigate }) => {
   const { portfolioData } = usePortfolioData();
+  const [activeCategory, setActiveCategory] = useState("All");
   const [displayedResources, setDisplayedResources] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const list = portfolioData.resources || [];
-    // Load top 3 resources to display on the home screen
-    setDisplayedResources(list.slice(0, 3));
+    const filtered = activeCategory === "All"
+      ? list
+      : list.filter((res) => res.categoryPath && res.categoryPath.includes(activeCategory));
+    setDisplayedResources(filtered.slice(0, 3));
     setLoading(false);
-  }, [portfolioData.resources]);
+  }, [portfolioData.resources, activeCategory]);
 
   // Resolves the category path IDs into a clean hierarchy breadcrumb e.g. B.Tech › CS › Books
   const resolveCategoryPathNames = (pathIds: string[]): string => {
@@ -69,6 +72,25 @@ const ResourcesSection: React.FC<ResourcesSectionProps> = ({ navigate }) => {
       <h2 className="section__title">Resources Catalog</h2>
       <span className="section__subtitle">Lecture Notes, Guides & Technical Sheets</span>
 
+      {/* Category Filter Tabs */}
+      <div className="resources__tabs container">
+        <button
+          className={`resources__tab-btn ${activeCategory === "All" ? "active" : ""}`}
+          onClick={() => setActiveCategory("All")}
+        >
+          <i className="uil uil-cube"></i> All Material
+        </button>
+        {portfolioData.resourceCategories?.map((cat: any) => (
+          <button
+            key={cat.id}
+            className={`resources__tab-btn ${activeCategory === cat.id ? "active" : ""}`}
+            onClick={() => setActiveCategory(cat.id)}
+          >
+            <i className="uil uil-folder"></i> {cat.name}
+          </button>
+        ))}
+      </div>
+
       <div className="resources__container container">
         {/* Terminal Header Info Panel - Dev Theme */}
         <div 
@@ -98,6 +120,11 @@ const ResourcesSection: React.FC<ResourcesSectionProps> = ({ navigate }) => {
         <div className="resources__grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: "1.5rem" }}>
           {displayedResources.map((res) => (
             <div className="resources__book-card" key={res.id}>
+              {/* Technical cyber corners */}
+              <div className="resources__card-corner resources__card-corner--tl"></div>
+              <div className="resources__card-corner resources__card-corner--tr"></div>
+              <div className="resources__card-corner resources__card-corner--bl"></div>
+              <div className="resources__card-corner resources__card-corner--br"></div>
               {/* 3D Physical Flipping Book cover */}
               <div className="resources__book-wrapper">
                 <div className="resources__book">
