@@ -55,8 +55,29 @@ const Testimonials: React.FC = () => {
           >
             {testimonials.map(({ id, image, title, description }: Testimonial) => (
               <SwiperSlide className="testimonial__card" key={id}>
-                <img src={image} alt={title} className="testimonial__img" />
-                <h3 className="testimonial__name">{title}</h3>
+                {/* Cyber corners */}
+                <div className="testimonial__card-corner testimonial__card-corner--tl"></div>
+                <div className="testimonial__card-corner testimonial__card-corner--tr"></div>
+                <div className="testimonial__card-corner testimonial__card-corner--bl"></div>
+                <div className="testimonial__card-corner testimonial__card-corner--br"></div>
+
+                {/* Decorative quote icon */}
+                <i className="uil uil-quote-right testimonial__quote-icon"></i>
+
+                <div className="testimonial__client-info">
+                  <img src={image} alt={title} className="testimonial__img" />
+                  <div>
+                    <h3 className="testimonial__name">{title}</h3>
+                    <div className="testimonial__stars">
+                      <i className="uil uil-star"></i>
+                      <i className="uil uil-star"></i>
+                      <i className="uil uil-star"></i>
+                      <i className="uil uil-star"></i>
+                      <i className="uil uil-star"></i>
+                    </div>
+                  </div>
+                </div>
+                
                 <p className="testimonial__description">{description}</p>
               </SwiperSlide>
             ))}
