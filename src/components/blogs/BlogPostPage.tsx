@@ -1257,21 +1257,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ blogId, navigate }) => {
 
           {/* Sticky Table of Contents Sidebar */}
           {headings.length > 0 && (
-            <aside 
-              className="blog-post__toc-sidebar"
-              style={{
-                width: "220px",
-                position: "sticky",
-                top: "100px",
-                display: "none", 
-                flexDirection: "column",
-                rowGap: "0.85rem",
-                flexShrink: 0,
-                maxHeight: "calc(100vh - 140px)",
-                overflowY: "auto",
-                padding: "0.25rem 0.5rem"
-              }}
-            >
+            <aside className="blog-post__toc-sidebar">
               <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--title-color)", fontWeight: 700, letterSpacing: "1px", marginBottom: "0.5rem", borderBottom: "1px solid rgba(100,116,139,0.1)", paddingBottom: "0.5rem" }}>
                 On This Page
               </h4>
