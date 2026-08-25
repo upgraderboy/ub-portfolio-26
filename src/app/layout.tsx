@@ -47,7 +47,7 @@ export default async function RootLayout({
                   if (accentColor) {
                     var style = document.createElement('style');
                     style.id = 'custom-accent-color-style';
-                    style.innerHTML = ':root, [data-theme="dark"] { --green-color: ' + accentColor + ' !important; --btn-color: ' + accentColor + ' !important; } [data-theme="dark"] { --text-color: ' + accentColor + ' !important; }';
+                    style.innerHTML = '[data-theme="dark"] { --green-color: ' + accentColor + ' !important; --btn-color: ' + accentColor + ' !important; --text-color: ' + accentColor + ' !important; }';
                     document.head.appendChild(style);
                   }
                   
