@@ -532,20 +532,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, navigate })=>{
                   )}
                 </button>
                 {showUserDropdown && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: 0,
-                      top: "calc(100% + 0.5rem)",
-                      backgroundColor: "var(--container-color)",
-                      border: "1px solid rgba(100, 116, 139, 0.15)",
-                      borderRadius: "0.75rem",
-                      padding: "0.75rem",
-                      minWidth: "160px",
-                      zIndex: 1000,
-                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.15)"
-                    }}
-                  >
+                  <div className="nav__user-menu">
                     <div style={{ fontSize: "0.8rem", color: "var(--text-color-light)", marginBottom: "0.5rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       Hi, {user.displayName || user.email?.split("@")[0] || "User"}
                     </div>

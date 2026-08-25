@@ -27,7 +27,7 @@
 }
 
 .project__item:hover{
-    background-color: #01C369;
+    background-color: var(--green-color);
     color: var(--title-color);
 }
 .project__container {

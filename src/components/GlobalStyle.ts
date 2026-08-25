@@ -144,7 +144,7 @@ img {
 }
 .section__title {
   font-size: var(--h1-font-size);
-  color: #01C369;
+  color: var(--green-color);
 }
 .section__subtitle {
   display: block;
@@ -282,8 +282,8 @@ box-shadow:0px 0px 9px 9px var(--btn-shadow) ;
 .portfolio-loader-circle {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(0, 255, 30, 0.1);
-  border-top-color: #00ff1e;
+  border: 3px solid rgba(1, 195, 105, 0.1);
+  border-top-color: var(--green-color);
   border-radius: 50%;
   animation: loader-spin 1s infinite linear;
 }

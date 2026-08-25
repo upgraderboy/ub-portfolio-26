@@ -1,16 +1,18 @@
 .terminal__window {
   background-color: #080d1a;
-  border: 1px solid rgba(0, 255, 30, 0.25);
+  border: 1px solid var(--green-color);
   border-radius: 0.75rem;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 30, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--green-color);
   max-width: 800px;
-  width: 100%;
+  width: calc(100% - 2.5rem);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .terminal__header {
   background-color: #0b1224;
-  border-bottom: 1px solid rgba(0, 255, 30, 0.15);
+  border-bottom: 1px solid var(--green-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -49,7 +51,7 @@
 }
 
 .terminal__header-icon {
-  color: #00ff1e;
+  color: var(--green-color);
   font-size: 1.2rem;
 }
 
@@ -58,8 +60,8 @@
   height: 380px;
   overflow-y: auto;
   font-family: "Courier New", Courier, monospace;
-  color: #00ff1e;
-  text-shadow: 0 0 4px rgba(0, 255, 30, 0.35);
+  color: var(--green-color);
+  text-shadow: 0 0 4px var(--green-color);
   display: flex;
   flex-direction: column;
   row-gap: 0.5rem;
@@ -149,7 +151,7 @@
   color: #fff;
   font-family: inherit;
   font-size: inherit;
-  caret-color: #00ff1e;
+  caret-color: var(--green-color);
 }
 
 /* Custom Output Formatting */
@@ -162,7 +164,7 @@
 }
 
 .terminal__help-cmd {
-  color: #00ff1e;
+  color: var(--green-color);
   font-weight: var(--font-medium);
 }
 
@@ -171,7 +173,7 @@
 }
 
 .terminal__highlight {
-  color: #00ff1e;
+  color: var(--green-color);
   font-weight: var(--font-semi-bold);
 }
 
@@ -209,14 +211,14 @@
 }
 
 .terminal__specs strong {
-  color: #00ff1e;
+  color: var(--green-color);
   font-weight: var(--font-medium);
 }
 
 .terminal__secret-granted {
   text-align: center;
   padding: 1rem 0;
-  color: #00ff1e;
+  color: var(--green-color);
   animation: glowPulse 2s infinite ease-in-out;
 }
 

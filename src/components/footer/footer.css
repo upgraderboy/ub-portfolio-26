@@ -9,7 +9,7 @@
 } */
 .footer__title,
 .footer__link {
-  color: #00ff1e;
+  color: var(--green-color);
 }
 .footer__title {
   display: flex;

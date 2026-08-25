@@ -47,7 +47,7 @@
 /* ACTIVE LINK */
 .active-link,
 .nav__link:hover {
-  color: #01C369;
+  color: var(--green-color);
 }
 /* BREAKPOINTS */
 /* for medium devices */
@@ -255,5 +255,26 @@
     border-right: 1px solid rgba(1, 195, 105, 0.2);
     border-bottom: 1px solid rgba(1, 195, 105, 0.2);
     transform: rotate(45deg);
+  }
+}
+
+/* User dropdown container */
+.nav__user-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  background-color: var(--container-color);
+  border: 1px solid rgba(100, 116, 139, 0.15);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  min-width: 160px;
+  z-index: 1000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (max-width: 768px) {
+  .nav__user-menu {
+    top: auto;
+    bottom: calc(100% + 0.5rem);
   }
 }

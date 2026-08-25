@@ -253,7 +253,7 @@ export const initialPortfolioData: PortfolioData = {
       id: "cmd-secret",
       command: "secret",
       description: "Decrypt hidden system node",
-      response: "<div class=\"terminal__secret-granted\"><i class=\"uil uil-shield-check\" style=\"font-size: 2.5rem; color: #00ff1e; display: block; margin-bottom: 0.25rem;\"></i><div>ACCESS GRANTED</div><div class=\"terminal__fade\" style=\"font-size: 0.8rem; margin-top: 0.25rem;\">Decrypted: \"Keep upgrading, stay secure.\"</div></div>",
+      response: "<div class=\"terminal__secret-granted\"><i class=\"uil uil-shield-check\" style=\"font-size: 2.5rem; color: var(--green-color); display: block; margin-bottom: 0.25rem;\"></i><div>ACCESS GRANTED</div><div class=\"terminal__fade\" style=\"font-size: 0.8rem; margin-top: 0.25rem;\">Decrypted: \"Keep upgrading, stay secure.\"</div></div>",
       isHtml: true
     }
   ]
