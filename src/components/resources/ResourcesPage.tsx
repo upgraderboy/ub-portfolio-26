@@ -268,60 +268,68 @@ const ResourcesPage: React.FC<ResourcesPageProps> = ({ navigate }) => {
             <div className="resources__grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: "1.5rem" }}>
               {filteredResources.map((res) => (
                 <div className="resources__book-card" key={res.id}>
-                  {/* The 3D Physical Book Graphic */}
-                  <div className="resources__book-wrapper">
-                    <div className="resources__book">
-                      {/* Front Cover */}
-                      <div className="resources__book-cover">
-                        {res.thumbnailUrl ? (
-                          <img src={res.thumbnailUrl} alt={res.title} className="resources__book-img" />
-                        ) : (
-                          <div className="resources__book-fallback" style={{ padding: "0.75rem", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                            <i className="uil uil-file-pdf" style={{ fontSize: "2rem", color: "var(--green-color)" }}></i>
-                            <span style={{ fontSize: "0.65rem", fontWeight: "700", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", textTransform: "uppercase", color: "var(--title-color)", marginTop: "0.25rem", wordBreak: "break-word", lineHeight: "1.2" }}>
-                              {res.title}
-                            </span>
-                          </div>
-                        )}
-                        {/* Glossy Overlay */}
-                        <div className="resources__book-overlay"></div>
+                  {/* Technical cyber corners */}
+                  <div className="resources__card-corner resources__card-corner--tl"></div>
+                  <div className="resources__card-corner resources__card-corner--tr"></div>
+                  <div className="resources__card-corner resources__card-corner--bl"></div>
+                  <div className="resources__card-corner resources__card-corner--br"></div>
+
+                  {/* 3D Physical Flipping Book cover in preview container */}
+                  <div className="resources__card-preview-area">
+                    <div className="resources__book-wrapper">
+                      <div className="resources__book">
+                        {/* Front Cover */}
+                        <div className="resources__book-cover">
+                          {res.thumbnailUrl ? (
+                            <img src={res.thumbnailUrl} alt={res.title} className="resources__book-img" />
+                          ) : (
+                            <div className="resources__book-fallback" style={{ padding: "0.75rem", textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                              <i className="uil uil-file-pdf" style={{ fontSize: "2rem", color: "var(--green-color)" }}></i>
+                              <span style={{ fontSize: "0.65rem", fontWeight: "700", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", textTransform: "uppercase", color: "var(--title-color)", marginTop: "0.25rem", wordBreak: "break-word", lineHeight: "1.2" }}>
+                                {res.title}
+                              </span>
+                            </div>
+                          )}
+                          {/* Glossy Overlay */}
+                          <div className="resources__book-overlay"></div>
+                        </div>
+                        {/* Spine */}
+                        <div className="resources__book-spine"></div>
+                        {/* Paper Pages Stack */}
+                        <div className="resources__book-pages"></div>
+                        {/* Back Cover */}
+                        <div className="resources__book-back"></div>
+                        {/* Bookmark Ribbon */}
+                        <div className="resources__book-ribbon"></div>
                       </div>
-                      {/* Spine */}
-                      <div className="resources__book-spine"></div>
-                      {/* Paper Pages Stack */}
-                      <div className="resources__book-pages"></div>
-                      {/* Back Cover */}
-                      <div className="resources__book-back"></div>
-                      {/* Bookmark Ribbon */}
-                      <div className="resources__book-ribbon"></div>
                     </div>
                   </div>
 
                   {/* Metadata and Actions */}
                   <div className="resources__book-details">
-                    <span className="resources__card-category" title={resolveCategoryPathNames(res.categoryPath)} style={{ width: "100%", maxWidth: "100%", display: "block" }}>
+                    <span className="resources__card-category" title={resolveCategoryPathNames(res.categoryPath)}>
                       {resolveCategoryPathNames(res.categoryPath)}
                     </span>
-                    <h3 className="resources__card-title" style={{ margin: "0.25rem 0 0.5rem 0", fontSize: "1.15rem", fontWeight: "600", color: "var(--title-color)", width: "100%", wordBreak: "break-word" }}>
+                    <h3 className="resources__card-title">
                       {res.title}
                     </h3>
-                    <p className="resources__card-description" style={{ margin: "0 0 0.75rem 0", fontSize: "var(--small-font-size)", color: "var(--text-color)", width: "100%", wordBreak: "break-word" }}>
+                    <p className="resources__card-description">
                       {res.description}
                     </p>
                     
                     {res.source && (
-                      <span className="resources__card-source" style={{ fontSize: "0.75rem", color: "var(--text-color-light)", display: "inline-flex", alignItems: "center", columnGap: "0.25rem", marginBottom: "0.5rem" }}>
+                      <span className="resources__card-source" style={{ fontSize: "0.72rem", color: "var(--text-color-light)", display: "inline-flex", alignItems: "center", columnGap: "0.25rem", marginBottom: "0.5rem" }}>
                         <i className="uil uil-user"></i> Source: {res.source}
                       </span>
                     )}
                     
                     {res.tags && res.tags.length > 0 && (
-                      <div className="resources__card-tags" style={{ display: "flex", flexWrap: "wrap", gap: "0.25rem", marginBottom: "1rem" }}>
-                        {res.tags.map((tag: string, idx: number) => (
+                      <div className="resources__card-tags" style={{ display: "flex", flexWrap: "wrap", gap: "0.25rem", marginBottom: "1.25rem" }}>
+                        {res.tags.slice(0, 2).map((tag: string, idx: number) => (
                           <span
                             key={idx}
                             className="resources__card-tag"
-                            style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}
+                            style={{ fontSize: "0.65rem", padding: "2px 6px" }}
                             onClick={() => setSearchTerm(tag)}
                           >
                             #{tag}
@@ -330,31 +338,16 @@ const ResourcesPage: React.FC<ResourcesPageProps> = ({ navigate }) => {
                       </div>
                     )}
 
-                    {/* Action buttons matching specifications */}
                     <div className="resources__book-actions">
                       <button
-                        className="resources__card-btn button"
-                        style={{ flexGrow: 1, padding: "0.6rem 1rem", fontSize: "0.8rem", display: "inline-flex", justifyContent: "center", alignItems: "center" }}
+                        className="resources__btn-primary"
                         onClick={() => window.location.href = `/flipbook/index.html?file=${encodeURIComponent(res.id)}`}
                       >
-                        Read
-                        <i className="uil uil-book-open" style={{ marginLeft: "0.4rem" }}></i>
+                        <i className="uil uil-book-open"></i> Read
                       </button>
 
                       <button
-                        className="button button--secondary"
-                        style={{ 
-                          padding: "0.6rem 0.8rem", 
-                          fontSize: "0.8rem", 
-                          borderRadius: "0.5rem",
-                          display: "inline-flex", 
-                          alignItems: "center", 
-                          justifyContent: "center",
-                          backgroundColor: "transparent",
-                          border: "1px solid var(--green-color)",
-                          color: "var(--green-color)",
-                          cursor: "pointer"
-                        }}
+                        className="resources__btn-secondary"
                         onClick={() => {
                           const a = document.createElement("a");
                           a.href = res.pdfUrl;
